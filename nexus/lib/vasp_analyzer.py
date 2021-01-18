@@ -891,7 +891,7 @@ class VaspAnalyzer(SimulationAnalyzer):
                         if ilast and elast:
                             self.transfer_from(elec_step)
                         #end if
-                    #end for
+                        #end for
                 #end if
             #end for
         #end if

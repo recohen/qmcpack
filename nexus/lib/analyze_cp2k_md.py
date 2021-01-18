@@ -2,7 +2,7 @@
 
 from cp2k_analyzer import Cp2kAnalyzer
 from md_analysis import *
-import tkinter as tk
+import Tkinter as tk
 import tkFileDialog
 
 

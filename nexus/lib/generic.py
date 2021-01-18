@@ -33,6 +33,7 @@
 import sys
 import traceback
 from copy import deepcopy
+#import _pickle as cPickle
 import cPickle
 from random import randint
 
@@ -1278,18 +1279,18 @@ if __name__=='__main__':
     o[0]='d'
     o.o = obj('something','else')
 
-    print repr(o)
-    print o
-    print 'o' in o
+    print (repr(o))
+    print (o)
+    print ('o' in o)
     del o.a
-    print 'a' not in o
-    print len(o)==4
+    print ('a' not in o)
+    print (len(o)==4)
     o2 = o.copy()
-    print id(o2)!=id(o)
+    print (id(o2)!=id(o))
     o2.clear()
-    print len(o2)==0
+    print (len(o2)==0)
     o.append(6)
-    print len(o)==5 and 4 in o
+    print (len(o)==5 and 4 in o)
     #o.save('obj.p')
     #o.clear()
     #o.load('obj.p')
@@ -1297,14 +1298,14 @@ if __name__=='__main__':
     o.write('True\n')
     o.log('True')
     del o.o
-    print o
-    print o.list()
-    print o.tuple()
-    print o.obj()
-    print o.first()
-    print o.last()
-    print o.shallow_copy()
-    print o.inverse()
+    print (e)
+    print (e.list())
+    print (o.tuple())
+    print (o.obj())
+    print (o.first())
+    print (o.last())
+    print (o.shallow_copy())
+    print (oinverse())
     o2 = obj()
     o2.clear()
     o.transfer_to(o2)
@@ -1321,24 +1322,24 @@ if __name__=='__main__':
     o.copy_to(o2)
     o2.clear()
     o2.copy_from(o)
-    print o
+    print (o)
     o2.delete('b','c')
-    print o2
-    print o.get_optional('b')
-    print o.get_required('b')
+    print (o2)
+    print (o.get_optional('b'))
+    print (o.get_required('b'))
     o2 = o.copy()
-    print o2.delete_optional('b')
+    print (o2.delete_optional('b'))
     o2 = o.copy()
-    print o2.delete_required('b')
+    print (o2.delete_required('b'))
     o2.set_path('one fine day is'.split(),'here')
-    print o2
+    print (o2)
     o.warn('this is a warning')
     o.warn('this is another warning')
     o.warn('this\nis\na\nmultiline\nwarning')
     o.warn('final warning')
-    print 'printing normally'
+    print ('printing normally')
     message('this is a message')
-    print 'printing normally'
+    print ('printing normally')
     log('this is log output')
-    print 'printing normally'
+    print ('printing normally')
 #end if

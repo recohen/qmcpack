@@ -175,9 +175,9 @@ class UnitConverter(DevBase):
         uo = UnitConverter.unit_dict[target_unit]
 
         if(ui.type != uo.type):
-            print 'ERROR: in UnitConverter.convert()'
-            print '   type conversion attempted between'
-            print '   '+ui.type+' and '+uo.type
+            print ('ERROR: in UnitConverter.convert()')
+            print ('   type conversion attempted between')
+            print ('   '+ui.type+' and '+uo.type)
         else:
             value_out = (value-ui.shift)*ui.value/uo.value+uo.shift
         #end if

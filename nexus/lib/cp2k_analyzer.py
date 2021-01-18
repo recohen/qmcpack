@@ -68,6 +68,7 @@ class Cp2kAnalyzer(SimulationAnalyzer):
 
     
     def analyze(self):
+        import math
         path = self.path
 #        infile_name = self.infile_name
         outfile_name = self.outfile_name
@@ -91,19 +92,22 @@ class Cp2kAnalyzer(SimulationAnalyzer):
             T = float(f.readtokens()[-2])
             f.seek('PRESSURE [bar]',1)
             P = float(f.readtokens()[-2])/10000.0
-#for NPT we need Volume and Cell Parameters
             f.seek('VOLUME',1)         
             V = float(f.readtokens()[-2])*0.148184584700
+#for NPT we need Volume and Cell Parameters
+            PV = P*V*0.000229371150488297 # H
+            H=E+PV #enthalpy H
             # stress matrix S, note S00 is S11 in normal terms!
 #            S11, S12, S13 = f.readtokens()[-3:]
 #            S21, S22, S23 = f.readtokens()[-3:]
 #            S31, S32, S33 = f.readtokens()[-3:]
-            md_res.append((E,P,t,KE,PE,T,V))
+            V=V
+            md_res.append((E,P,t,KE,PE,T,V,PV,H))
             n+=1
         #end while
         md_res = array(md_res,dtype=float).T
         quantities = ('total_energyH','pressureGPa','timeps','kinetic_energyH',
-                      'potential_energyH','temperatureK','volumeA3')
+                      'potential_energyH','temperatureK','volumeA3','PVH','enthalpyH')
         md = obj()
         for i,q in enumerate(quantities):
             md[q] = md_res[i]
@@ -132,6 +136,7 @@ class Cp2kAnalyzer(SimulationAnalyzer):
                 v.shape = nb,autocorr
                 mean,error = simplestats(v.mean(axis=1))
                 mds[q] = mean,error,autocorr,nexclude
+        
         return mds
 
 
@@ -139,6 +144,7 @@ class Cp2kAnalyzer(SimulationAnalyzer):
         import numpy as np
         import matplotlib.pyplot as plt
         md = self.md_data
+        md_stats=self.md_stats
         plt.figure()
         plt.subplots_adjust(left=0.2)
         plt.subplots_adjust(bottom=0.15)

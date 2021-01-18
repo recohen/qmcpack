@@ -147,44 +147,51 @@ class PwscfAnalyzer(SimulationAnalyzer):
         md_res = []
         while f.seek('!',1)!=-1:
             E = float(f.readtokens()[-2]) #E is really F electronic free energy 
-#with F-D smearing at appropriate T
+#with F-D smearing at appropriate T--WAS--FIXED? DEPENDS ON VERSION
             try:
                 f.seek('smearing contrib',1)
                 demet=-float(f.readtokens()[-2])
             except:
-                demet=0.0 
+                demet=0.0
             try:
                 f.seek('internal energy',1)
                 U=float(f.readtokens()[-2])
             except:
-                U=0.0 
-            f.seek(' P=',1)
-            P = float(f.readtokens()[-1])/10. #convert to GPa
-            # stress matrix S, note S00 is S11 in normal terms!
-            S11, S12, S13 = f.readtokens()[-3:]
-            S21, S22, S23 = f.readtokens()[-3:]
-            S31, S32, S33 = f.readtokens()[-3:]
-            S11=float(S11)/10.
-            S12=float(S12)/10.
-            S13=float(S13)/10.
-            S21=float(S21)/10.
-            S22=float(S22)/10.
-            S23=float(S23)/10.
-            S31=float(S31)/10.
-            S32=float(S32)/10.
-            S33=float(S33)/10.
-            f.seek('time      =',1)
+                pass
             try:
-                t = float(f.readtokens()[-2])
+                f.seek(' P=',1)
+                P = float(f.readtokens()[-1])/10. #convert to GPa
+                # stress matrix S, note S00 is S11 in normal terms!
+                S11, S12, S13 = f.readtokens()[-3:]
+                S21, S22, S23 = f.readtokens()[-3:]
+                S31, S32, S33 = f.readtokens()[-3:]
+                S11=float(S11)/10.
+                S12=float(S12)/10.
+                S13=float(S13)/10.
+                S21=float(S21)/10.
+                S22=float(S22)/10.
+                S23=float(S23)/10.
+                S31=float(S31)/10.
+                S32=float(S32)/10.
+                S33=float(S33)/10.
             except:
-                pass 
+                pass
+            f.seek('time      =',1)
+            try:    
+                t = float(f.readtokens()[-2])
+                print(t)
+            except:
+                pass
             f.seek('kinetic energy',1)
             try:
                 K = float(f.readtokens()[-2])
             except:
                 pass
-            f.seek('temperature',1)
-            T = float(f.readtokens()[-2])
+            try:
+                f.seek('temperature',1)
+                T = float(f.readtokens()[-2])
+            except:
+                pass
             md_res.append((E,U,demet,P,t,K,T,S11,S12,S13,S21,S22,S23,S31,S32,S33))
             n+=1
         #end while
@@ -260,7 +267,7 @@ class PwscfAnalyzer(SimulationAnalyzer):
                     try:
                         num_kpoints      = int(l.strip().split()[4])
                     except:
-                        print "Number of k-points {0} is not an integer".format(num_kpoints)
+                        print ("Number of k-points {0} is not an integer".format(num_kpoints))
 
                     kpoints_2pi_alat = lines[i+2:i+2+num_kpoints]
                     kpoints_rel      = lines[i+4+num_kpoints:i+4+2*num_kpoints]
@@ -680,7 +687,7 @@ class PwscfAnalyzer(SimulationAnalyzer):
                     data    = data,
                     kpoints = kpoints
                     )
-            except Exception,e:
+            except Exception as e:
                 if self.info.warn:
                     self.warn('encountered an exception during xml read, this data will not be available\nexception encountered: '+str(e))
                 #end if

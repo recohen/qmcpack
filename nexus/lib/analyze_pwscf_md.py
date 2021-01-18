@@ -1,10 +1,15 @@
 #! /usr/bin/env python
 
+#import gtk
+#gtk.set_interactive(False)
 import Tkinter as tk
+#import tkinter as tk
+#from tkinter import filedialog
 import tkFileDialog
 root = tk.Tk()
 root.withdraw()
 filename = tkFileDialog.askopenfilename(parent=root,title="Select QE MD output file" )
+#filename = filedialog.askopenfilename(parent=root,title="Select QE MD output file" )
 
 
 from pwscf_analyzer import PwscfAnalyzer 
